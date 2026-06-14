@@ -1,0 +1,3 @@
+	DFW NOOP, "NOOP"
+	ret
+	ENDW

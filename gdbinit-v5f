@@ -1,0 +1,18 @@
+# qingke v5f                                                                             
+
+set breakpoint always-inserted off
+
+define launch                                                                            
+shell make                                                                               
+target remote 127.0.0.1:3333                                                             
+file V5F.elf                                                                     
+monitor reset halt                                                                       
+load V5F.elf
+monitor reset halt                                                                       
+c                                                                                        
+end                                                                                      
+
+define reset                                                                             
+monitor reset halt                                                                       
+c                                                                                        
+end    
