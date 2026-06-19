@@ -70,6 +70,59 @@
 	ret
 	ENDW FROMR
 
+	DEFW 2DROP, "2DROP"
+	lw x15, 4(x9)
+	addi x9, x9, 8
+	ret
+	ENDW 2DROP
+
+	DEFW 2NIP, "2NIP"
+	lw x14, 0(x9)
+	addi x9, x9, 8
+	sw x14, 0(x9)
+	ret
+	ENDW 2NIP
+
+	DEFW 2DUP, "2DUP"
+	lw x14, 0(x9)
+	addi x9, x9, -8
+	sw x14, 0(x9)
+	sw x15, 4(x9)
+	ret
+	ENDW 2DUP
+
+	DEFW 2SWAP, "2SWAP"
+	lw x14, 0(x9)
+	lw x13, 4(x9)
+	lw x12, 8(x9)
+	sw x15, 4(x9)
+	mv x15, x13
+	sw x14, 8(x9)
+	sw x12, 0(x9)
+	ret
+	ENDW 2SWAP
+
+	DEFW 2OVER, "2OVER"
+	RPUSH x1
+	FC TOR, TOR, 2DUP, FROMR, FROMR
+	RPOP x1
+	TC 2SWAP
+	ENDW 2OVER
+
+	DEFW 2ROT, "2ROT"
+	RPUSH x1
+	FC TOR, TOR, 2SWAP, FROMR, FROMR
+	RPOP x1
+	TC 2SWAP
+	ENDW 2ROT
+
+	DEFW 2NROT, "2-ROT"
+	RPUSH x1
+	FC 2SWAP, TOR, TOR, 2SWAP, FROMR, FROMR
+	RPOP x1
+	ret
+	ENDW 2NROT
+	
 	DEFW EQ, "="
 	mv x14, x15
 	PPOP x13
@@ -79,6 +132,12 @@
 1:
 	ret
 	ENDW EQ
+
+	DEFW 3DROP, "3DROP"
+	lw x15, 8(x9)
+	addi x9, x9, 12
+	ret
+	ENDW 3DROP
 
 	DEFW NE, "<>"
 	mv x14, x15
