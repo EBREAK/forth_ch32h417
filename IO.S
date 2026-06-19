@@ -1,0 +1,54 @@
+	DEFW EARLY_EMIT, "EARLY-EMIT"
+	mv x14, x15
+	PPOP x15
+	li x13, USART1_BASE
+1:
+	lw x12, R32_USART_STATR(x13)
+	andi x12, x12, USART_TC
+	beqz x12, 1b
+	sw x14, R32_USART_DATAR(x13)
+1:
+	lw x12, R32_USART_STATR(x13)
+	andi x12, x12, USART_TC
+	beqz x12, 1b
+	ret
+	ENDW EARLY_EMIT
+
+	DEFW EARLY_KEYAVA, "EARLY-KEY?"
+	PPUSH x15
+	li x15, -1
+	li x14, USART1_BASE
+	lw x13, R32_USART_STATR(x14)
+	andi x13, x13, USART_RXNE
+	bnez x13, 1f
+	li x15, 0
+1:
+	ret
+	ENDW EARLY_KEYAVA
+
+	DEFW EARLY_KEY, "EARLY-KEY"
+	RPUSH x1
+1:
+	FC PAUSE, EARLY_KEYAVA
+	ZBR 1b
+	PPUSH x15
+	li x14, USART1_BASE
+	lw x15, R32_USART_DATAR(x14)
+	RPOP x1
+	ret
+	ENDW EARLY_KEY
+
+	DEFW EMIT, "EMIT"
+	lw x14, USER_EMIT(x4)
+	jr x14
+	ENDW EMIT
+
+	DEFW KEYAVA, "KEY?"
+	lw x14, USER_KEYAVA(x4)
+	jr x14
+	ENDW KEYAVA
+
+	DEFW KEY, "KEY"
+	lw x14, USER_KEY(x4)
+	jr x14
+	ENDW KEY

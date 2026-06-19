@@ -414,7 +414,8 @@ TEST_PAUSE:
 	ZBR 1b
 	FC DROP, PZCHK
 
-	
+
+	.INCLUDE "TEST_IO.S"
 
 	RPOP x1
 	ret

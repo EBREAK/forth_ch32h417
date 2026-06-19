@@ -14,6 +14,7 @@ _forth_dict_rom_start:
 	.POPSECTION
 
 	.INCLUDE "CORE.S"
+	.INCLUDE "IO.S"
 	.INCLUDE "TEST.S"
 
 	.PUSHSECTION .rodata.forth_dict
@@ -34,6 +35,7 @@ RSTK_ROOT_TOP:
 	.PUSHSECTION .data
 	.P2ALIGN 2, 0
 USER_ROOT:
+	.4BYTE USER_ROOT_END - .
 	.4BYTE USER_ROOT
 	.4BYTE CODE_ROOT
 	.4BYTE TOS_INIT
@@ -41,6 +43,12 @@ USER_ROOT:
 	.4BYTE RSTK_ROOT_TOP
 	.4BYTE PSTK_ROOT_TOP
 	.4BYTE RSTK_ROOT_TOP
+	.4BYTE W_EARLY_EMIT
+	.4BYTE W_EARLY_KEYAVA
+	.4BYTE W_EARLY_KEY
+USER_ROOT_END:
+	# RESV SPACE FOR GROW
+	.FILL 8, 4, 0
 	.POPSECTION
 
 	.PUSHSECTION .text
@@ -58,6 +66,23 @@ CODE_ROOT:
 	j 1b
 
 forth:
+	# clean register
+	li x1, 0
+	li x2, 0
+	li x3, 0
+	li x4, 0
+	li x5, 0
+	li x6, 0
+	li x7, 0
+	li x8, 0
+	li x9, 0
+	li x10, 0
+	li x11, 0
+	li x12, 0
+	li x13, 0
+	li x14, 0
+	li x15, 0
+
 	la x4, USER_ROOT
 	lw x1, USER_RAS(x4)
 	lw x15, USER_TOS(x4)
