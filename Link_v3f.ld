@@ -26,14 +26,6 @@ SECTIONS
 		_einit = .;
 	} >FLASH AT>FLASH
 
-	.forth :
-	{
-		. = ALIGN(4);
-		*(.forth);
-		*(.forth*);
-		. = ALIGN(4);
-	} >FLASH AT>FLASH
-
     .loadcodelalign : 
     {       
         . = ALIGN(4);
@@ -65,6 +57,7 @@ SECTIONS
 		*(.text.*)
 		*(.rodata)
 		*(.rodata*)
+		*(.rodata.*)
         *(.sdata2.*)
 		*(.glue_7)
 		*(.glue_7t)
@@ -201,6 +194,7 @@ SECTIONS
 
 	PROVIDE( _end = _ebss);
 	PROVIDE( end = . );
+	PROVIDE( _forth_code_ram_start = .);
 
 	PROVIDE(_forth_dict_end = ORIGIN(RAM) + LENGTH(RAM) - __stack_size - 4);
 

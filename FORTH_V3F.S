@@ -3,25 +3,65 @@
 	.INCLUDE "EARLY_V3F.S"
 	.INCLUDE "BOOT_V3F.S"
 
-	.PUSHSECTION .forth.dict
+	# register
+	# TOS: x15
+	# RSP: x8
+	# PSP: x9
+	# UP: x4
+
+	.PUSHSECTION .rodata.forth_dict
 _forth_dict_rom_start:
 	.POPSECTION
 
 	.INCLUDE "CORE.S"
+	.INCLUDE "TEST.S"
 
-	.PUSHSECTION .forth.dict
+	.PUSHSECTION .rodata.forth_dict
 	.2BYTE 0X0000
 _forth_dict_rom_end:
 	.POPSECTION
 
+	.PUSHSECTION .bss
+	.P2ALIGN 2, 0
+PSTK_ROOT:
+	.FILL STACK_DEPTH, 4, 0
+PSTK_ROOT_TOP:
+RSTK_ROOT:
+	.FILL STACK_DEPTH, 4, 0
+RSTK_ROOT_TOP:
+	.POPSECTION
 
+	.PUSHSECTION .data
+	.P2ALIGN 2, 0
+USER_ROOT:
+	.4BYTE USER_ROOT
+	.4BYTE CODE_ROOT
+	.4BYTE TOS_INIT
+	.4BYTE PSTK_ROOT_TOP
+	.4BYTE RSTK_ROOT_TOP
+	.4BYTE PSTK_ROOT_TOP
+	.4BYTE RSTK_ROOT_TOP
+	.POPSECTION
 
 	.PUSHSECTION .text
-forth:
+CODE_ROOT:
+	FC SELFTEST
 
-	
-	
+	li x10, USART1_BASE
 1:
-	li x1, 0x3F
+	lw x11, R32_USART_STATR(x10)
+	andi x11, x11, USART_TC
+	beqz x11, 1b
+	li x11, 'F'
+	sw x11, R32_USART_DATAR(x10)
+1:
 	j 1b
+
+forth:
+	la x4, USER_ROOT
+	lw x1, USER_RAS(x4)
+	lw x15, USER_TOS(x4)
+	lw x8, USER_RSP(x4)
+	lw x9, USER_PSP(x4)
+	ret
 	.POPSECTION

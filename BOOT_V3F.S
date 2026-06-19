@@ -466,8 +466,11 @@ _load_base:
 	sw zero, (a0)
 	addi a0, a0, 4
 	bltu a0, a1, 1b
+
+	.PUSHSECTION .text.unused
+	/* we can support multi forth dict, in FLASH or SRAM */
 	/* copy forth dict from flash to RAM */
-2:  
+2:
 	la x10, _forth_dict_rom_start
 	la x11, _forth_dict_end
 	la x12, _forth_dict_rom_end
@@ -481,7 +484,12 @@ _load_base:
 	addi x11, x11, 1
 	addi x12, x12, -1
 	bnez x12, 1b
+	.POPSECTION
 2:
+	la x10, _forth_dict_end
+	sb zero, -1(x10)
+	sb zero, -2(x10)
+	
 	ret
 
 	.section	.handle_reset,"ax",@progbits
