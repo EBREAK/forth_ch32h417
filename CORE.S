@@ -434,3 +434,10 @@ FORTH_DP:
 	ret
 	ENDW PAUSE
 
+	DEFW DEPTH, "DEPTH"
+	lw x14, USER_PS0(x4)
+	sub x13, x14, x9
+	PPUSH x15
+	srli x15, x13, 2
+	ret
+	ENDW DEPTH
