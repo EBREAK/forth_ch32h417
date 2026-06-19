@@ -550,6 +550,7 @@ is_v3f:
 	ori t0, t0, 3           
 	csrw mtvec, t0
 
+	fence.i
 	call EARLY_INIT
 
 BP:	la t0, forth
