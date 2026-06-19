@@ -68,8 +68,7 @@ CODE_ROOT:
 forth:
 	# clean register
 	li x1, 0
-	li x2, 0
-	li x3, 0
+	# dont clear sp gp
 	li x4, 0
 	li x5, 0
 	li x6, 0
