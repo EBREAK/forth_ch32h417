@@ -55,7 +55,7 @@ TEST_ZBR:
 	FC FALSE
 	ZBR 1f
 4:
-	.4BYTE 0xDEADD001
+	unimp
 2:
 	FC FALSE
 	ZBR 3f
