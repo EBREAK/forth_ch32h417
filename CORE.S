@@ -217,7 +217,7 @@
 	xor x15, x15, -1
 	addi x15, x15, 1
 	ret
-	ENDW INVERT
+	ENDW NEGATE
 
 	DEFW CLOAD, "C@"
 	lbu x15, 0(x15)
