@@ -22,12 +22,14 @@ v5f:
 	$(CC) $(V5F_CFLAGS) FORTH_V5F.S -o V5F.elf
 	$(OD) -d V5F.elf > V5F.dis
 	$(OC) -O ihex V5F.elf V5F.hex
+	$(OC) -O binary V5F.elf V5F.bin
 	$(SZ) V5F.elf
 
 v3f:
 	$(CC) $(V3F_CFLAGS) FORTH_V3F.S -o V3F.elf
 	$(OD) -s -d V3F.elf > V3F.dis
 	$(OC) -O ihex V3F.elf V3F.hex
+	$(OC) -O binary V3F.elf V3F.bin
 	$(SZ) V3F.elf
 
 
