@@ -16,6 +16,7 @@ _forth_dict_rom_start:
 	.INCLUDE "CORE.S"
 	.INCLUDE "IO.S"
 	.INCLUDE "DEBUG.S"
+	.INCLUDE "STRING.S"
 	.INCLUDE "TEST.S"
 
 	.PUSHSECTION .rodata.forth_dict
