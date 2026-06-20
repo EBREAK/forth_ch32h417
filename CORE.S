@@ -177,6 +177,15 @@
 	ret
 	ENDW LT
 
+	DEFW LTZ, "0<"
+	mv x14, x15
+	li x15, -1
+	bltz x14, 1f
+	li x15, 0
+1:
+	ret
+	ENDW LTZ
+
 	DEFW GT, ">"
 	mv x14, x15
 	PPOP x13
@@ -186,6 +195,15 @@
 1:
 	ret
 	ENDW GT
+
+	DEFW GTZ, "0>"
+	mv x14, x15
+	li x15, -1
+	bgtz x14, 1f
+	li x15, 0
+1:
+	ret
+	ENDW GTZ
 
 	DEFW ULT, "U<"
 	mv x14, x15
