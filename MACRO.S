@@ -1,5 +1,6 @@
 	.MACRO DEFW LABEL, NAME
 	.PUSHSECTION .rodata.forth_dict
+	NT_\LABEL:
 		.BYTE NLEN_\LABEL
 	NAME_\LABEL:
 		.ASCII "\NAME"

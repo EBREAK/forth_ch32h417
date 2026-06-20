@@ -1,0 +1,82 @@
+	DEFW CONTEXT_LIMIT, "CONTEXT-LIMIT"
+	LIT CONTEXT_LIMIT
+	ret
+	ENDW CONTEXT_LIMIT
+
+	DEFW CONTEXT, "CONTEXT"
+	.PUSHSECTION .data
+	.P2ALIGN 2, 0
+CONTEXT:
+	.FILL CONTEXT_LIMIT, 4, 0
+	.POPSECTION
+	LAT CONTEXT
+	ret
+	ENDW CONTEXT
+
+	DEFW NT2NEXT, "NT>NEXT"
+	bnez x15, 1f
+	ret
+1:
+	lbu x14, 0(x15)
+	lbu x13, 1(x15)
+	slli x13, x13, 8
+	or x14, x14, x13
+	bnez x14, 1f
+	li x15, 0
+	ret
+1:
+	andi x14, x14, NLEN_MASK
+	add x15, x15, x14
+	addi x15, x15, 1 + 4
+	lbu x14, 0(x15)
+	lbu x13, 1(x15)
+	slli x13, x13, 8
+	or x14, x14, x13
+	bnez x14, 1f
+	li x15, 0
+1:
+	ret
+	ENDW NT2NEXT
+
+	DEFW NT2NAME, "NT>NAME"
+	addi x15, x15, 1
+	ret
+	ENDW NT2NAME
+
+	DEFW NT2NLEN, "NT>NLEN"
+	bnez x15, 1f
+	ret
+1:
+	lbu x15, 0(x15)
+	andi x15, x15, NLEN_MASK
+	ret
+	ENDW XT2NLEN
+
+	DEFW WORDLIST_WORDS, "WORDLIST-WORDS"
+	# ( NT -- )
+	RPUSH x1
+	FC DUP
+	ZBR 2f
+1:
+	FC SPACE, DUP, NT2NAME, OVER, NT2NLEN, TYPE
+	FC NT2NEXT, DUP, EQZ
+	ZBR 1b
+2:
+	RPOP x1
+	TC DROP
+	ENDW WORDLIST_WORDS
+
+	DEFW WORDS, "WORDS"
+	# ( -- )
+	RPUSH x1
+	LIT 0
+1:
+	FC DUP
+	slli x15, x15, 2
+	FC CONTEXT, PLUS, LOAD, WORDLIST_WORDS
+	addi x15, x15, 1
+	FC DUP, CONTEXT_LIMIT, EQ
+	ZBR 1b
+	RPOP x1
+	TC DROP
+	ENDW WORDS

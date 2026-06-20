@@ -17,11 +17,16 @@ _forth_dict_rom_start:
 	.INCLUDE "IO.S"
 	.INCLUDE "DEBUG.S"
 	.INCLUDE "STRING.S"
+	.INCLUDE "INTERPRET.S"
 	.INCLUDE "TEST.S"
+
+	DEFW ROM_LATEST
+	LAT NT_ROM_LATEST
+	ret
+	ENDW ROM_LATEST
 
 	.PUSHSECTION .rodata.forth_dict
 	.2BYTE 0X0000
-_forth_dict_rom_end:
 	.POPSECTION
 
 	.PUSHSECTION .bss
@@ -69,6 +74,18 @@ CODE_ROOT:
 	j 1b
 
 forth:
+	# INIT EMPTY FORTH DICT IN SRAM
+	la x10, _forth_dict_end
+	sb zero, -1(x10)
+	sb zero, -2(x10)
+
+	# INIT FORTH CONTEXT
+	la x10, CONTEXT
+	la x11, _forth_dict_end - 2 # DICT IN RAM
+	sw x11, 0(x10)
+	la x11, _forth_dict_rom_start # DICT IN ROM
+	sw x11, 4(x10)
+
 	# clean register
 	li x1, 0
 	# dont clear sp gp
