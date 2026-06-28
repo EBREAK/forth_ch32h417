@@ -7,12 +7,12 @@ DB = gdb
 OCD ?= openocd-wch
 
 V5F_CFLAGS += \
-	      -march=rv32imac_zicsr_zifencei -mabi=ilp32 \
+	      -march=rv32imacfb_zicsr_zifencei -mabi=ilp32f \
 	      -nostdlib -nostartfiles -static -ggdb \
 	      -T Link_v5f.ld \
 
 V3F_CFLAGS += \
-	      -march=rv32imac_zicsr_zifencei -mabi=ilp32 \
+	      -march=rv32imacfb_zicsr_zifencei -mabi=ilp32f \
 	      -nostdlib -nostartfiles -static -ggdb \
 	      -T Link_v3f.ld \
 
