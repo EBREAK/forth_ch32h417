@@ -128,3 +128,71 @@ CONTEXT:
 	RPOP x1
 	ret
 	ENDW FIND
+
+	DEFW WIB, "WIB"
+	# ( -- C-ADDR )
+	PPUSH x15
+	lw x15, USER_WIB(x4)
+	ret
+	ENDW WIB
+
+	DEFW WIN, "WIN"
+	# ( -- ADDR )
+	PPUSH x15
+	add x15, x4, USER_WIN
+	ret
+	ENDW WIN
+
+	DEFW WIB_LIMIT, "WIB-LIMIT"
+	# ( -- COUNT )
+	LIT NLEN_MASK
+	ret
+	ENDW WIB_LIMIT
+
+	DEFW WIB_PUSH, "WIB-PUSH"
+	# ( C -- )
+	RPUSH x1
+	FC WIN, LOAD, WIB_LIMIT, MOD
+	FC WIB, PLUS, CSTORE
+	FC WIN, LOAD
+	addi x15, x15, 1
+	FC WIB_LIMIT, MOD, WIN
+	RPOP x1
+	TC STORE
+	ENDW WIB_PUSH
+
+	DEFW ISDELIM, "DELIM?"
+	# ( C -- FLAG )
+	xori x14, x15, '\r'
+	beqz x14, 1f
+	xori x14, x15, '\n'
+	beqz x14, 1f
+	xori x14, x15, ' '
+	beqz x14, 1f
+	li x15, 0
+	ret
+1:
+	li x15, -1
+	ret
+	ENDW ISDELIM
+
+	DEFW TOKEN, "TOKEN"
+	# ( -- )
+	RPUSH x1
+	LIT 0
+	FC WIN, STORE
+1:
+	FC KEY, DUP, ISDELIM
+
+	ZBR 3f
+	FC WIN, LOAD
+	ZBR 2f
+	RPOP x1
+	TC DROP
+2:
+	FC DROP
+	j 1b
+3:
+	FC WIB_PUSH
+	j 1b
+	ENDW TOKEN
