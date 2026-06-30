@@ -459,3 +459,11 @@ FORTH_DP:
 	srli x15, x13, 2
 	ret
 	ENDW DEPTH
+
+	DEFW ABORT, "ABORT"
+	li x15, TOS_INIT
+	lw x9, USER_PS0(x4)
+	lw x8, USER_RS0(x4)
+	lw x1, USER_SAV(x4)
+	ret
+	ENDW ABORT
